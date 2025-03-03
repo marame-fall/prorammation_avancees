@@ -5,18 +5,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
+import javax.swing.*;
 import jakarta.persistence.EntityManager;
-//import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class Login extends JFrame {
@@ -75,7 +65,7 @@ public class Login extends JFrame {
                 if (authenticate(email, password)) {
                     JOptionPane.showMessageDialog(Login.this, "Connexion réussie !");
                     dispose(); // Ferme la fenêtre de connexion
-                    openAuthentification(); // Ouvre la page d'authentification
+                    new AuthentificationGUI().setVisible(true); // Ouvre la page d'authentification
                 } else {
                     JOptionPane.showMessageDialog(Login.this, "Email ou mot de passe incorrect.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -102,15 +92,6 @@ public class Login extends JFrame {
                 em.close();
             }
         }
-    }
-    
-    private void openAuthentification() {
-        // Créez et affichez la page d'authentification ou une autre fenêtre ici
-        JFrame authentificationFrame = new JFrame("Page d'authentification");
-        authentificationFrame.setSize(500, 300);
-        authentificationFrame.setLocationRelativeTo(null);
-        authentificationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        authentificationFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
