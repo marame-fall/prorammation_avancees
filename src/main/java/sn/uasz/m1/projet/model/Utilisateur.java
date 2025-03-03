@@ -24,7 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Utilisateur")
-public abstract class Utilisateur {
+public class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -39,7 +39,7 @@ public abstract class Utilisateur {
     private String email;
 
     @Column(nullable = false)
-    private String sexe; 
+    private String sexe;
 
     @Column(nullable = false)
     private String motDePasse;

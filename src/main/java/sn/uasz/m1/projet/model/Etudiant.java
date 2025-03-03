@@ -5,8 +5,8 @@ import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+//import jakarta.persistence.Temporal;
+//import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,7 +28,7 @@ public class Etudiant extends Utilisateur{
     private String ine;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+   // @Temporal(TemporalType.DATE)
     private Date dateNaissance;
 
     @Column(nullable = false)

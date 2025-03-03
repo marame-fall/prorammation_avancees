@@ -1,4 +1,4 @@
-package sn.uasz.m1.projet;
+/*package sn.uasz.m1.projet;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -7,11 +7,11 @@ import javax.swing.UIManager;
 
 import jakarta.persistence.EntityManager;
 import sn.uasz.m1.projet.gui.Connexion;
-import sn.uasz.m1.projet.gui.LoginFrame;
+import sn.uasz.m1.projet.gui.Login;
 
 /**
  * Classe principale de l'application
- */
+ 
 public class App {
     public static void main(String[] args) {
         try {
@@ -30,22 +30,22 @@ public class App {
                     // Lancer l'interface graphique
                     SwingUtilities.invokeLater(() -> {
                         // Créer et afficher la fenêtre de connexion
-                        LoginFrame loginFrame = new LoginFrame();
+                        Login loginFrame = new Login();
                         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         loginFrame.setLocationRelativeTo(null); // Centrer la fenêtre
                         loginFrame.setVisible(true);
                     });
                 } else {
-                    JOptionPane.showMessageDialog(null, 
-                            "Impossible de se connecter à la base de données.", 
-                            "Erreur de connexion", 
+                    JOptionPane.showMessageDialog(null,
+                            "Impossible de se connecter à la base de données.",
+                            "Erreur de connexion",
                             JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 System.err.println("Erreur lors de l'initialisation de la connexion : " + e.getMessage());
-                JOptionPane.showMessageDialog(null, 
-                        "Erreur de connexion à la base de données : " + e.getMessage(), 
-                        "Erreur", 
+                JOptionPane.showMessageDialog(null,
+                        "Erreur de connexion à la base de données : " + e.getMessage(),
+                        "Erreur",
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
@@ -53,4 +53,4 @@ public class App {
             e.printStackTrace();
         }
     }
-}
+}*/

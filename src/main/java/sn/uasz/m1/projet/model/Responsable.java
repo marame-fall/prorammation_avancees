@@ -21,22 +21,22 @@ import lombok.Setter;
 public class Responsable extends Utilisateur{
    // @Id
 //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String matricule;
+   private String matricule;
 
-    @Column(nullable = false)
-    private String prenom;
+   @Column(nullable = false)
+   private String prenom;
 
-    @Column(nullable = false)
-    private String nom;
+   @Column(nullable = false)
+   private String nom;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+   @Column(unique = true, nullable = false)
+   private String email;
 
-    @Column(nullable = false)
-    private String sexe; 
+   @Column(nullable = false)
+   private String sexe;
 
-    @Column(nullable = false)
-    private String motDePasse;
+   @Column(nullable = false)
+   private String motDePasse;
 
      //@Enumerated(EnumType.STRING) // Indique que le rôle est stocké sous forme de chaîne
      //@Column(nullable = false)

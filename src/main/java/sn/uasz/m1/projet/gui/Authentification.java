@@ -116,7 +116,7 @@ public class Authentification extends JFrame {
         etudiantButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new LoginFrame().setVisible(true);
+                new Login().setVisible(true);
                 dispose();
             }
         });
@@ -124,7 +124,7 @@ public class Authentification extends JFrame {
         responsableButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new LoginFrame().setVisible(true);
+                new Login().setVisible(true);
                 dispose();
             }
         });
