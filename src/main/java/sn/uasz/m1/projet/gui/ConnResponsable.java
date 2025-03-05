@@ -55,7 +55,7 @@ public class ConnResponsable extends JFrame {
             JOptionPane.showMessageDialog(this, "Connexion réussie !");
             dispose(); // Fermer la fenêtre après connexion réussie
             // Rediriger vers l'interface du responsable pédagogique
-            new IdentificationResponsable();
+            new ResponsableGUI().setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Email ou mot de passe incorrect !", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
