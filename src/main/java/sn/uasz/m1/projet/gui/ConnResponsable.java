@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import sn.uasz.m1.projet.model.Responsable;
+
 public class ConnResponsable extends JFrame {
     private JTextField emailField;
     private JPasswordField passwordField;
@@ -109,7 +111,7 @@ public class ConnResponsable extends JFrame {
         if ("admin@uasz.sn".equals(email) && "admin123".equals(password)) {
             JOptionPane.showMessageDialog(this, "Connexion réussie !");
             dispose();
-            new ResponsableGUI().setVisible(true);
+            new ResponsableGUI(null).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Email ou mot de passe incorrect !", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
