@@ -1,325 +1,313 @@
-package sn.uasz.m1.projet.gui;
+/*package sn.uasz.m1.projet.gui;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 
 public class Login extends JFrame {
-
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
-    private JButton cancelButton;
+    private final Color BACKGROUND_COLOR = Color.WHITE;
+    private final Color GREEN_COLOR = new Color(60, 179, 113);
+    private final Color TEXT_COLOR = new Color(70, 70, 70);
+    private final Color SUBTITLE_COLOR = new Color(100, 100, 100);
 
     public Login() {
         setTitle("Connexion au système");
+        setSize(1200, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Utilise ImagePanel comme fond
-        ImagePanel backgroundPanel = new ImagePanel("/image/ath.jpeg");
-        setContentPane(backgroundPanel);
-        backgroundPanel.setLayout(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(BACKGROUND_COLOR);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Augmente les marges
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.BLACK);
+        headerPanel.setPreferredSize(new Dimension(getWidth(), 40));
+
+        JLabel titleLabel = new JLabel("Page de connexion");
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
+        headerPanel.add(titleLabel, BorderLayout.WEST);
+
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(BACKGROUND_COLOR);
+
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setBackground(BACKGROUND_COLOR);
+        leftPanel.setPreferredSize(new Dimension(500, 600));
+        JLabel imageLabel = new JLabel(new ImageIcon("/image/etu.jpeg"));
+        imageLabel.setHorizontalAlignment(JLabel.CENTER);
+        leftPanel.add(imageLabel, BorderLayout.CENTER);
+
+        JPanel rightPanel = new JPanel(new GridBagLayout());
+        rightPanel.setBackground(BACKGROUND_COLOR);
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        JLabel welcomeLabel = new JLabel("Bienvenue");
+        welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        welcomeLabel.setForeground(TEXT_COLOR);
 
         JLabel emailLabel = new JLabel("Email:");
-        emailLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Nouvelle police
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        backgroundPanel.add(emailLabel, gbc);
+        emailLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        emailLabel.setForeground(TEXT_COLOR);
+        JTextField emailField = new JTextField(20);
+        emailField.setPreferredSize(new Dimension(300, 35));
 
-        emailField = new JTextField(30);
-        emailField.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Nouvelle police
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(emailField, gbc);
+        JLabel passwordLabel = new JLabel("Mot de Passe:");
+        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        passwordLabel.setForeground(TEXT_COLOR);
+        JPasswordField passwordField = new JPasswordField(20);
+        passwordField.setPreferredSize(new Dimension(300, 35));
 
-        JLabel passwordLabel = new JLabel("Mot de passe:");
-        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Nouvelle police
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        backgroundPanel.add(passwordLabel, gbc);
+        JCheckBox showPasswordCheckBox = new JCheckBox("Afficher le mot de passe");
+        showPasswordCheckBox.setBackground(BACKGROUND_COLOR);
+        showPasswordCheckBox.addActionListener(e -> passwordField.setEchoChar(showPasswordCheckBox.isSelected() ? (char) 0 : '•'));
 
-        passwordField = new JPasswordField(30);
-        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Nouvelle police
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(passwordField, gbc);
-
-        loginButton = new JButton("Se connecter");
+        JButton loginButton = new JButton("Se connecter");
+        loginButton.setBackground(GREEN_COLOR);
+        loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        cancelButton = new JButton("Annuler");
-        cancelButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        // Définir une taille fixe pour les boutons
-        Dimension buttonSize = new Dimension(150, 30); // Ajuste ces valeurs selon tes besoins
-        loginButton.setPreferredSize(buttonSize);
-        cancelButton.setPreferredSize(buttonSize);
-
-        // Bouton "Se connecter"
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1; // Occupe 1 colonne
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(loginButton, gbc);
-
-        // Bouton "Annuler"
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1; // Occupe 1 colonne
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(cancelButton, gbc);
-
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
-                String password = new String(passwordField.getPassword());
-                if (authenticate(email, password)) {
-                    JOptionPane.showMessageDialog(Login.this, "Connexion réussie !");
-                    dispose(); // Ferme la fenêtre de connexion
-                    new AuthentificationGUI().setVisible(true); // Ouvre la page d'authentification
-                } else {
-                    JOptionPane.showMessageDialog(Login.this, "Email ou mot de passe incorrect.", "Erreur",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.addActionListener(e -> {
+            String email = emailField.getText();
+            String password = new String(passwordField.getPassword());
+            if (authenticate(email, password)) {
+                JOptionPane.showMessageDialog(this, "Connexion réussie !");
+                dispose();
+                new AuthentificationGUI().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Email ou mot de passe incorrect.", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        cancelButton.addActionListener(e -> dispose());
-        setSize(500, 200);
-        // setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximise la fenêtre
-    }
-
-    public static boolean authenticate(String email, String password) {
-        EntityManager em = null;
-        try {
-            em = Persistence.createEntityManagerFactory("gestion_inscription_pedagogiquePU").createEntityManager();
-            Long count = (Long) em.createQuery(
-                    "SELECT COUNT(u) FROM Utilisateur u WHERE u.email = :email AND u.motDePasse = :password")
-                    .setParameter("email", email)
-                    .setParameter("password", password)
-                    .getSingleResult();
-            return count > 0;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return false;
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Login().setVisible(true));
-    }
-
-    // Classe ImagePanel pour l'image de fond
-    static class ImagePanel extends JPanel {
-        private BufferedImage image;
-
-        public ImagePanel(String imagePath) {
-            try {
-                URL imgUrl = getClass().getResource(imagePath);
-                if (imgUrl != null) {
-                    image = ImageIO.read(imgUrl);
-                } else {
-                    System.err.println("Image not found: " + imagePath);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-            }
-        }
-    }
-}
-        
-
-/* 
-
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-
-import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Persistence;
-
-public class Login extends JFrame {
-
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
-    private JButton cancelButton;
-
-    public Login() {
-        setTitle("Connexion au système");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        // Utilise ImagePanel comme fond
-        ImagePanel backgroundPanel = new ImagePanel("/image/ath.jpeg");
-        setContentPane(backgroundPanel);
-        backgroundPanel.setLayout(new GridBagLayout());
+        JButton returnButton = new JButton("Annuler");
+        returnButton.setBackground(Color.WHITE);
+        returnButton.setForeground(TEXT_COLOR);
+        returnButton.addActionListener(e -> {
+            dispose();
+            new AuthentificationGUI().setVisible(true);
+        });
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Augmente les marges
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(8, 0, 8, 0);
+        gbc.gridwidth = 2;
 
-        JLabel emailLabel = new JLabel("Email:");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        backgroundPanel.add(emailLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; rightPanel.add(welcomeLabel, gbc);
+        gbc.gridy = 1; rightPanel.add(emailLabel, gbc);
+        gbc.gridy = 2; rightPanel.add(emailField, gbc);
+        gbc.gridy = 3; rightPanel.add(passwordLabel, gbc);
+        gbc.gridy = 4; rightPanel.add(passwordField, gbc);
+        gbc.gridy = 5; rightPanel.add(showPasswordCheckBox, gbc);
+        gbc.gridy = 6; gbc.anchor = GridBagConstraints.CENTER; rightPanel.add(loginButton, gbc);
+        gbc.gridy = 7; rightPanel.add(returnButton, gbc);
 
-        emailField = new JTextField(30);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(emailField, gbc);
+        contentPanel.add(leftPanel, new GridBagConstraints());
+        contentPanel.add(rightPanel, new GridBagConstraints());
 
-        JLabel passwordLabel = new JLabel("Mot de passe:");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        backgroundPanel.add(passwordLabel, gbc);
-
-        passwordField = new JPasswordField(30);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(passwordField, gbc);
-
-        loginButton = new JButton("Se connecter");
-        cancelButton = new JButton("Annuler");
-
-        // Bouton "Se connecter"
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1; // Occupe 1 colonne
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(loginButton, gbc);
-
-        // Bouton "Annuler"
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1; // Occupe 1 colonne
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        backgroundPanel.add(cancelButton, gbc);
-
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String email = emailField.getText();
-                String password = new String(passwordField.getPassword());
-                if (authenticate(email, password)) {
-                    JOptionPane.showMessageDialog(Login.this, "Connexion réussie !");
-                    dispose(); // Ferme la fenêtre de connexion
-                    new AuthentificationGUI().setVisible(true); // Ouvre la page d'authentification
-                } else {
-                    JOptionPane.showMessageDialog(Login.this, "Email ou mot de passe incorrect.", "Erreur",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        cancelButton.addActionListener(e -> dispose());
-        setSize(500,200);
-       // setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximise la fenêtre
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        add(mainPanel);
     }
 
     public static boolean authenticate(String email, String password) {
         EntityManager em = null;
         try {
             em = Persistence.createEntityManagerFactory("gestion_inscription_pedagogiquePU").createEntityManager();
-            Long count = (Long) em.createQuery(
-                    "SELECT COUNT(u) FROM Utilisateur u WHERE u.email = :email AND u.motDePasse = :password")
-                    .setParameter("email", email)
-                    .setParameter("password", password)
-                    .getSingleResult();
+            Long count = em.createQuery("SELECT COUNT(u) FROM Utilisateur u WHERE u.email = :email AND u.motDePasse = :password", Long.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .getSingleResult();
             return count > 0;
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         } finally {
-            if (em != null) {
-                em.close();
-            }
+            if (em != null) em.close();
         }
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Login().setVisible(true));
-    }
-
-    // Classe ImagePanel pour l'image de fond
-    static class ImagePanel extends JPanel {
-        private BufferedImage image;
-
-        public ImagePanel(String imagePath) {
-            try {
-                URL imgUrl = getClass().getResource(imagePath);
-                if (imgUrl != null) {
-                    image = ImageIO.read(imgUrl);
-                } else {
-                    System.err.println("Image not found: " + imagePath);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-            }
-        }
     }
 }*/
+package sn.uasz.m1.projet.gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
+
+public class Login extends JFrame {
+    private final Color BACKGROUND_COLOR = Color.WHITE;
+    private final Color GREEN_COLOR = new Color(60, 179, 113);
+    private final Color TEXT_COLOR = new Color(70, 70, 70);
+
+    public Login() {
+        setTitle("Connexion au système");
+        setSize(1200, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(BACKGROUND_COLOR);
+
+        // Barre d'en-tête
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(Color.BLACK);
+        headerPanel.setPreferredSize(new Dimension(getWidth(), 40));
+
+        JLabel titleLabel = new JLabel("Page de connexion");
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
+        headerPanel.add(titleLabel, BorderLayout.WEST);
+
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(BACKGROUND_COLOR);
+
+        // Panel gauche (Image)
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setBackground(BACKGROUND_COLOR);
+        leftPanel.setPreferredSize(new Dimension(500, 600));
+
+        // Chargement sécurisé de l'image
+        JLabel imageLabel = loadImage("/image/vv.jpeg", 400, 400);
+        if (imageLabel != null) {
+            imageLabel.setHorizontalAlignment(JLabel.CENTER);
+            leftPanel.add(imageLabel, BorderLayout.CENTER);
+        }
+
+        // Panel droit (Formulaire)
+        JPanel rightPanel = new JPanel(new GridBagLayout());
+        rightPanel.setBackground(BACKGROUND_COLOR);
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        JLabel welcomeLabel = new JLabel("Connexion a la Base de Donnee");
+        welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        welcomeLabel.setForeground(TEXT_COLOR);
+
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        emailLabel.setForeground(TEXT_COLOR);
+        JTextField emailField = new JTextField(20);
+        emailField.setPreferredSize(new Dimension(300, 35));
+
+        JLabel passwordLabel = new JLabel("Mot de Passe:");
+        passwordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        passwordLabel.setForeground(TEXT_COLOR);
+        JPasswordField passwordField = new JPasswordField(20);
+        passwordField.setPreferredSize(new Dimension(300, 35));
+
+        JCheckBox showPasswordCheckBox = new JCheckBox("Afficher le mot de passe");
+        showPasswordCheckBox.setBackground(BACKGROUND_COLOR);
+        showPasswordCheckBox.addActionListener(e -> passwordField.setEchoChar(showPasswordCheckBox.isSelected() ? (char) 0 : '•'));
+
+        JButton loginButton = new JButton("Se connecter");
+        loginButton.setBackground(GREEN_COLOR);
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.addActionListener(e -> {
+            String email = emailField.getText();
+            String password = new String(passwordField.getPassword());
+            if (authenticate(email, password)) {
+                JOptionPane.showMessageDialog(this, "Connexion réussie !");
+                dispose();
+                new AuthentificationGUI().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Email ou mot de passe incorrect.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JButton returnButton = new JButton("Annuler");
+        returnButton.setBackground(Color.WHITE);
+        returnButton.setForeground(TEXT_COLOR);
+        returnButton.addActionListener(e -> {
+            dispose();
+            new AuthentificationGUI().setVisible(true);
+        });
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(8, 0, 8, 0);
+        gbc.gridwidth = 2;
+
+        gbc.gridx = 0; gbc.gridy = 0; rightPanel.add(welcomeLabel, gbc);
+        gbc.gridy = 1; rightPanel.add(emailLabel, gbc);
+        gbc.gridy = 2; rightPanel.add(emailField, gbc);
+        gbc.gridy = 3; rightPanel.add(passwordLabel, gbc);
+        gbc.gridy = 4; rightPanel.add(passwordField, gbc);
+        gbc.gridy = 5; rightPanel.add(showPasswordCheckBox, gbc);
+        gbc.gridy = 6; gbc.anchor = GridBagConstraints.CENTER; rightPanel.add(loginButton, gbc);
+        gbc.gridy = 7; rightPanel.add(returnButton, gbc);
+
+        contentPanel.add(leftPanel, new GridBagConstraints());
+        contentPanel.add(rightPanel, new GridBagConstraints());
+
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        add(mainPanel);
+    }
+
+    // ✅ Méthode de chargement sécurisé de l'image
+    private JLabel loadImage(String path, int width, int height) {
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource(path));
+            if (icon.getIconWidth() == -1) {
+                System.out.println("❌ Image non trouvée : " + path);
+                return null;
+            }
+            Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new JLabel(new ImageIcon(img));
+        } catch (Exception e) {
+            System.out.println("❌ Erreur de chargement de l'image : " + path);
+            return null;
+        }
+    }
+
+    // ✅ Méthode d'authentification avec JPA
+    public static boolean authenticate(String email, String password) {
+        EntityManager em = null;
+        try {
+            em = Persistence.createEntityManagerFactory("gestion_inscription_pedagogiquePU").createEntityManager();
+            Long count = em.createQuery("SELECT COUNT(u) FROM Utilisateur u WHERE u.email = :email AND u.motDePasse = :password", Long.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .getSingleResult();
+            return count > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        } finally {
+            if (em != null) em.close();
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Login().setVisible(true));
+    }
+}
+

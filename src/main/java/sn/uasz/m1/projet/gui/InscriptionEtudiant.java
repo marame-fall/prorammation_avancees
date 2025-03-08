@@ -11,6 +11,8 @@ public class InscriptionEtudiant extends JFrame {
 
         JLabel label = new JLabel("Page d'inscription des étudiants", SwingConstants.CENTER);
         add(label);
+
+        setVisible(true);
     }
     
 }
