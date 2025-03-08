@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import sn.uasz.m1.projet.model.Responsable;
+//import sn.uasz.m1.projet.model.Responsable;
 
 public class ConnResponsable extends JFrame {
     private JTextField emailField;

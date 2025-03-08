@@ -32,13 +32,13 @@ public class UE {
     private String nom;
 
     @Column(nullable = false)
-    private int volumeHoraire;
+    private String volumeHoraire;
 
     @Column(nullable = false)
-    private int coefficient;
+    private String coefficient;
 
     @Column(nullable = false)
-    private int credit;
+    private String credit;
 
     @Column(nullable = false)
     private String enseignantResponsable;
