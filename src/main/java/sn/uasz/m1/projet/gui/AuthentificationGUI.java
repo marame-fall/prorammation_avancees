@@ -170,14 +170,14 @@ public class AuthentificationGUI extends JFrame {
         JButton etudiantBtn = createStyledButton("Étudiant");
         etudiantBtn.addActionListener(e -> {
             dispose(); // Fermer cette fenêtre
-            new ConnEtudiant(); // Ouvrir la connexion étudiant
+            new ConnEtudiant().setVisible(true); // Ouvrir la connexion étudiant
         });
         
         // Bouton Responsable
         JButton responsableBtn = createStyledButton("Responsable");
         responsableBtn.addActionListener(e -> {
             dispose(); // Fermer cette fenêtre
-            new ConnResponsable(); // Ouvrir la connexion responsable
+            new ConnResponsable().setVisible(true); // Ouvrir la connexion responsable
         });
         
         // Ajout des composants au panneau droit avec GridBagLayout
