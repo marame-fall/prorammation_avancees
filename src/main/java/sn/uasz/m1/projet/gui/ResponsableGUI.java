@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
 import java.util.List;
@@ -26,7 +28,6 @@ import javax.swing.table.DefaultTableModel;
 //import sn.uasz.m1.projet.gui.FormationDAO;
 import sn.uasz.m1.projet.model.Formation;
 import sn.uasz.m1.projet.model.Responsable;
-import sn.uasz.m1.projet.model.UE;
 
 public class ResponsableGUI extends JFrame {
     private Responsable responsableConnecte;
@@ -110,128 +111,87 @@ public class ResponsableGUI extends JFrame {
         add(sidebar, BorderLayout.WEST);
         add(mainPanel, BorderLayout.CENTER);
     }
-
-    /*private void afficherUes() {
-        mainPanel.removeAll();
-        mainPanel.revalidate();
-        mainPanel.repaint();
     
-        JPanel gestionPanel = new JPanel(new BorderLayout());
-        gestionPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    
-        tableModel = new DefaultTableModel(new String[]{"Code", "Nom", "Volume Horaire", "Coefficient", "Crédits", "Enseignant"}, 0);
-        table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-    
-        // Panel pour les champs de l'UE
-        JPanel formPanel = new JPanel(new GridLayout(0,2,5,5));
-        JTextField txtCode = new JTextField(10);
-        JTextField txtNom = new JTextField(15);
-        JTextField txtVolumeHoraire = new JTextField(10);
-        JTextField txtCoefficient = new JTextField(10);
-        JTextField txtCredits = new JTextField(10);
-        JTextField txtEnseignant = new JTextField(15);
-        JButton btnAjouter = new JButton("Ajouter");
-        JButton btnModifier = new JButton("Modifier");
-        JButton btnSupprimer = new JButton("Supprimer");
-    
-        formPanel.add(new JLabel("Code :"));
-        formPanel.add(txtCode);
-        formPanel.add(new JLabel("Nom :"));
-        formPanel.add(txtNom);
-        formPanel.add(new JLabel("Volume Horaire :"));
-        formPanel.add(txtVolumeHoraire);
-        formPanel.add(new JLabel("Coefficient :"));
-        formPanel.add(txtCoefficient);
-        formPanel.add(new JLabel("Crédits :"));
-        formPanel.add(txtCredits);
-        formPanel.add(new JLabel("Enseignant :"));
-        formPanel.add(txtEnseignant);
-        formPanel.add(btnAjouter);
-        formPanel.add(btnModifier);
-        formPanel.add(btnSupprimer);
-    
-        //btnAjouter.addActionListener(e -> ajouterUE(txtCode, txtNom, txtVolumeHoraire, txtCoefficient, txtCredits, txtEnseignant));
-        //btnModifier.addActionListener(e -> modifierUE(txtCode, txtNom, txtVolumeHoraire, txtCoefficient, txtCredits, txtEnseignant));
-        //btnSupprimer.addActionListener(e -> supprimerUE());
-    
-        gestionPanel.add(scrollPane, BorderLayout.CENTER);
-        gestionPanel.add(formPanel, BorderLayout.SOUTH);
-    
-        // Charger les UEs dans le tableau
-        FormationDAO formationDAO = new FormationDAO();
-        List<UE> ues = formationDAO.getAllUes(); // Assure-toi d'avoir la méthode pour récupérer les UEs
-        for (UE ue : ues) {
-            tableModel.addRow(new Object[]{
-                ue.getCode(), 
-                ue.getNom(), 
-                ue.getVolumeHoraire(), 
-                ue.getCoefficient(), 
-                ue.getCredit(), 
-                ue.getEnseignantResponsable()});
-        }
-    
-        mainPanel.add(gestionPanel, BorderLayout.CENTER);
-        mainPanel.revalidate();
-        mainPanel.repaint();
-    }*/
-
     private void afficherUes() {
         mainPanel.removeAll();
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        mainPanel.setLayout(new BorderLayout());
     
-        JPanel formPanel = new JPanel(new GridLayout(0, 2, 5, 5));
-        JTextField txtCode = new JTextField(10);
-        JTextField txtNom = new JTextField(15);
-        JTextField txtVolumeHoraire = new JTextField(10);
-        JTextField txtCoefficient = new JTextField(10);
-        JTextField txtCredits = new JTextField(10);
-        JTextField txtEnseignant = new JTextField(15);
-        JButton btnValider = new JButton("Valider");
+        // 🎯 1. Ajout du titre en haut
+        JLabel titleLabel = new JLabel("Gestion des Unités d’Enseignement", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Police plus grande
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0)); // Marge en haut et en bas
     
-        formPanel.add(new JLabel("Code :"));
-        formPanel.add(txtCode);
-        formPanel.add(new JLabel("Nom :"));
-        formPanel.add(txtNom);
-        formPanel.add(new JLabel("Volume Horaire :"));
-        formPanel.add(txtVolumeHoraire);
-        formPanel.add(new JLabel("Coefficient :"));
-        formPanel.add(txtCoefficient);
-        formPanel.add(new JLabel("Crédits :"));
-        formPanel.add(txtCredits);
-        formPanel.add(new JLabel("Enseignant :"));
-        formPanel.add(txtEnseignant);
-        formPanel.add(btnValider);
+        // 🎯 2. Création du panel formulaire
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(7,7, 7, 7);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
     
-        mainPanel.add(formPanel, BorderLayout.CENTER);
+        // Labels et champs de texte
+        JLabel lblCode = new JLabel("Code :");
+        JLabel lblNom = new JLabel("Nom :");
+        JLabel lblVolumeHoraire = new JLabel("Volume Horaire :");
+        JLabel lblCoefficient = new JLabel("Coefficient :");
+        JLabel lblCredits = new JLabel("Crédits :");
+        JLabel lblEnseignant = new JLabel("Enseignant :");
+    
+        JTextField txtCode = new JTextField();
+        JTextField txtNom = new JTextField();
+        JTextField txtVolumeHoraire = new JTextField();
+        JTextField txtCoefficient = new JTextField();
+        JTextField txtCredits = new JTextField();
+        JTextField txtEnseignant = new JTextField();
+    
+        // 🎯 3. Définir la taille réduite des champs
+        Dimension fieldSize = new Dimension(250, 40);
+        txtCode.setPreferredSize(fieldSize);
+        txtNom.setPreferredSize(fieldSize);
+        txtVolumeHoraire.setPreferredSize(fieldSize);
+        txtCoefficient.setPreferredSize(fieldSize);
+        txtCredits.setPreferredSize(fieldSize);
+        txtEnseignant.setPreferredSize(fieldSize);
+    
+        JButton btnAjouter = new JButton("Ajouter");
+        btnAjouter.setPreferredSize(new Dimension(80, 35));
+        btnAjouter.setBackground(new Color(10, 10, 40));
+        btnAjouter.setForeground(Color.WHITE);
+        btnAjouter.setFont(new Font("Arial", Font.BOLD, 14));
+        btnAjouter.setFocusPainted(false);
+        btnAjouter.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+    
+        // 🎯 4. Ajout des éléments au formulaire
+        gbc.gridx = 0; gbc.gridy = 0; formPanel.add(lblCode, gbc);
+        gbc.gridx = 1; gbc.gridy = 0; formPanel.add(txtCode, gbc);
+    
+        gbc.gridx = 0; gbc.gridy = 1; formPanel.add(lblNom, gbc);
+        gbc.gridx = 1; gbc.gridy = 1; formPanel.add(txtNom, gbc);
+    
+        gbc.gridx = 0; gbc.gridy = 2; formPanel.add(lblVolumeHoraire, gbc);
+        gbc.gridx = 1; gbc.gridy = 2; formPanel.add(txtVolumeHoraire, gbc);
+    
+        gbc.gridx = 0; gbc.gridy = 3; formPanel.add(lblCoefficient, gbc);
+        gbc.gridx = 1; gbc.gridy = 3; formPanel.add(txtCoefficient, gbc);
+    
+        gbc.gridx = 0; gbc.gridy = 4; formPanel.add(lblCredits, gbc);
+        gbc.gridx = 1; gbc.gridy = 4; formPanel.add(txtCredits, gbc);
+    
+        gbc.gridx = 0; gbc.gridy = 5; formPanel.add(lblEnseignant, gbc);
+        gbc.gridx = 1; gbc.gridy = 5; formPanel.add(txtEnseignant, gbc);
+    
+        gbc.gridx = 1; gbc.gridy = 6; formPanel.add(btnAjouter, gbc);
+    
+        // 🎯 5. Permettre le redimensionnement avec un JScrollPane
+        JScrollPane scrollPane = new JScrollPane(formPanel);
+        scrollPane.setPreferredSize(new Dimension(500, 400)); // Taille initiale
+    
+        // 🎯 6. Ajouter le formulaire centré dans la page
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
         
-        btnValider.addActionListener(e -> {
-            // Vérification des champs
-            if (txtCode.getText().isEmpty() || txtNom.getText().isEmpty() ||
-                txtVolumeHoraire.getText().isEmpty() || txtCoefficient.getText().isEmpty() ||
-                txtCredits.getText().isEmpty() || txtEnseignant.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(mainPanel, "Veuillez remplir tous les champs.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-    
-            // Création et ajout de l'UE en base
-            //UE nouvelleUE = new UE(txtCode.getText(), txtNom.getText(),
-                  //  Integer.parseInt(txtVolumeHoraire.getText()), 
-                   // Double.parseDouble(txtCoefficient.getText()), 
-                   // Integer.parseInt(txtCredits.getText()), 
-                    //txtEnseignant.getText());
-            
-           // FormationDAO formationDAO = new FormationDAO();
-            //formationDAO.ajouterUE(nouvelleUE); // Assure-toi que cette méthode existe
-    
-            // Afficher la liste des UEs après ajout
-            //afficherListeUes();
-        });
-    
         mainPanel.revalidate();
         mainPanel.repaint();
     }
+    
     
     private void afficherFormations() {
         mainPanel.removeAll();
